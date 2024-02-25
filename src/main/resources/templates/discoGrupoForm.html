@@ -28,7 +28,7 @@
         <td scope="row" th:text="${disco.duracion}"></td>
     </tr>
 </table>
-
+<a th:href="@{/grupo/bandAlbum/new/{id}(id=${grupo.id})}" class="btn btn-success">Add Album</a>
 
 <div th:replace="fragments/footer :: footer"></div>
 <br/>

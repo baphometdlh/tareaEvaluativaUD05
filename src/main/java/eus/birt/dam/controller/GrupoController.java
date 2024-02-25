@@ -3,6 +3,7 @@ package eus.birt.dam.controller;
 import eus.birt.dam.domain.Disco;
 import eus.birt.dam.domain.Grupo;
 import eus.birt.dam.repository.DiscoRepository;
+import eus.birt.dam.repository.EstiloRepository;
 import eus.birt.dam.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -21,6 +23,9 @@ public class GrupoController {
 
     @Autowired
     DiscoRepository discoRepository;
+
+    @Autowired
+    EstiloRepository estiloRepository;
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
@@ -53,4 +58,23 @@ public class GrupoController {
         model.addAttribute("grupo", grupo);
         return "discoGrupoForm";
     }
+
+    @GetMapping("/bandAlbum/new/{id}")
+    public String agregarAlbum(@PathVariable("id") Integer id, Model model) {
+        Grupo grupo = grupoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Grupo no encontrado"));
+        Disco disco = new Disco();
+        model.addAttribute("grupos", grupo);
+        model.addAttribute("disco", disco);
+        model.addAttribute("estilos", estiloRepository.findAll());
+        return "discoNewGrupoForm";
+    }
+
+    @PostMapping("/newAlbum/submit")
+    public String processCreationForm(@ModelAttribute Disco disco) {
+        discoRepository.save(disco);
+        return "redirect:/grupo";
+    }
+
+
 }

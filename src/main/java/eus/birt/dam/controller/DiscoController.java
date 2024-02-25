@@ -52,5 +52,4 @@ public class DiscoController {
         return "redirect:/discos";
     }
 
-
 }
